@@ -27,7 +27,11 @@ var app = builder.Build();
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Small Group Dinner API V1");
+            c.RoutePrefix = string.Empty; // Set the Swagger UI at the root
+        });
     }
 
     app.UseHttpsRedirection();

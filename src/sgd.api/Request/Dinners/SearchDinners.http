@@ -1,0 +1,3 @@
+### Search Dinners
+GET {{sgdApiHost}}/Dinner/search
+Content-Type: application/json

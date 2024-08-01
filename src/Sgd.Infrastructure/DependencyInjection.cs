@@ -7,6 +7,7 @@ using Polly.Extensions.Http;
 using Sgd.Application.Common.Interfaces;
 using Sgd.Infrastructure.Persistence;
 using Sgd.Infrastructure.Persistence.Configurations;
+using Sgd.Infrastructure.Persistence.Repositories;
 
 namespace Sgd.Infrastructure;
 
@@ -69,6 +70,8 @@ public static class DependencyInjection
 
         builder.Services.AddScoped<SgdDbContext>();
         builder.Services.AddScoped<IUnitOfWork, SgdDbContext>();
+        
+        builder.Services.AddScoped<IDinnerRepository, DinnerRepository>();
 
         return builder;
     }

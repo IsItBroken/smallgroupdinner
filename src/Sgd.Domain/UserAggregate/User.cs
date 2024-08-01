@@ -10,8 +10,8 @@ public class User : AggregateRoot<ObjectId>
 
     public Dictionary<string, UserAlias> Aliases { get; private set; } = new();
 
-    public User(string firstName, string lastName, string email, ObjectId id)
-        : base(id)
+    public User(string firstName, string lastName, string email, ObjectId? id = null)
+        : base(id ?? ObjectId.GenerateNewId())
     {
         FirstName = firstName;
         LastName = lastName;

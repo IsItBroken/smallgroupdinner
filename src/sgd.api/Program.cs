@@ -1,8 +1,10 @@
 using Sgd.Api;
 using Sgd.Application;
 using Sgd.Infrastructure;
+using Sgd.Infrastructure.CIAM.Auth0;
 
 var builder = WebApplication.CreateBuilder(args);
+
 {
     builder.AddPresentation().AddApplication().AddInfrastructure();
 
@@ -19,6 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 }
 
 var app = builder.Build();
+
 {
     app.UseCors("AllowAll");
     app.UseExceptionHandler();
@@ -37,6 +40,8 @@ var app = builder.Build();
     app.UseHttpsRedirection();
     app.UseAuthentication();
     app.UseAuthorization();
+
+    app.UseMiddleware<UserExistsMiddleware>();
 
     app.MapControllers();
 

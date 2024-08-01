@@ -10,6 +10,11 @@ public class UserRepository(SgdDbContext dbContext, IUnitOfWork unitOfWork) : IU
         unitOfWork.AddOperation(user, () => dbContext.Users.InsertOneAsync(user));
     }
 
+    public async Task AddUserBlocking(User user)
+    {
+        await dbContext.Users.InsertOneAsync(user);
+    }
+
     public async Task<User?> GetUserById(ObjectId id)
     {
         return await dbContext.Users.Find(u => u.Id == id).FirstOrDefaultAsync();

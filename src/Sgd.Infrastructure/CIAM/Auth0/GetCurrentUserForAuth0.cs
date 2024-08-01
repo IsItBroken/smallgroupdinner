@@ -37,24 +37,30 @@ public class GetCurrentUserForAuth0(
         return GetClaimValues("permissions");
     }
 
-    private async Task<ErrorOr<ObjectId>> GetUserId()
+    public string? GetTokenSub()
     {
         var claimsPrincipal = httpContextAccessor.HttpContext?.User;
         var auth0UserId =
             claimsPrincipal?.FindFirst("sub")
             ?? claimsPrincipal?.FindFirst(ClaimTypes.NameIdentifier);
+        return auth0UserId?.Value;
+    }
+
+    private async Task<ErrorOr<ObjectId>> GetUserId()
+    {
+        var auth0UserId = GetTokenSub();
         if (auth0UserId is null)
         {
             logger.LogDebug("Sub claim not found in user claims");
             return ICurrentUserProvider.NotFoundError;
         }
 
-        var (system, identifier) = Auth0TokenUtility.GetSystemAndId(auth0UserId.Value);
+        var (system, identifier) = Auth0TokenUtility.GetSystemAndId(auth0UserId);
         if (string.IsNullOrEmpty(system) || string.IsNullOrEmpty(identifier))
         {
             logger.LogDebug(
                 "Auth0 PatientAccessId is not in the expected format: {Auth0Id}",
-                auth0UserId.Value
+                auth0UserId
             );
             return ICurrentUserProvider.NotFoundError;
         }

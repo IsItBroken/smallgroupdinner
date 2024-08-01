@@ -19,7 +19,8 @@ public static class Auth0DependencyInjection
                 "Authentication:Auth0:Authority",
                 "Authentication:Auth0:Audience",
                 "Authentication:Auth0:ClientId",
-                "Authentication:Auth0:ClientSecret"
+                "Authentication:Auth0:ClientSecret",
+                "Authentication:Auth0:ManagementApiDomain"
             ]
         );
 
@@ -60,7 +61,9 @@ public static class Auth0DependencyInjection
             );
         });
 
+        builder.Services.AddAuth0ManagementClient().AddManagementAccessToken();
         builder.Services.AddSingleton<IAuthorizationHandler, RbacHandler>();
+        builder.Services.AddSingleton<Auth0AuthenticationService>();
         builder.Services.AddHttpClient<ITokenService, Auth0TokenService>();
         builder.Services.AddScoped<ICurrentUserProvider, GetCurrentUserForAuth0>();
 

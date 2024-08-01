@@ -12,4 +12,6 @@ public interface ICurrentUserProvider
     CurrentUser? GetCurrentUser();
 
     IReadOnlyList<string> GetCurrentUserTokenPermissions();
+
+    public string? GetTokenSub();
 }

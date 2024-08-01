@@ -5,6 +5,7 @@ namespace Sgd.Application.Common.Interfaces;
 public interface IUserRepository
 {
     void AddUser(User user);
+    Task AddUserBlocking(User user);
     Task<User?> GetUserById(ObjectId id);
     Task<List<User>> GetUsers(List<ObjectId> userIds);
     Task<User?> GetUserByAlias(string identifier, string system);

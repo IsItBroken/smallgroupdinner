@@ -7,17 +7,22 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["sgd.api/sgd.api.csproj", "sgd.api/"]
-RUN dotnet restore "sgd.api/sgd.api.csproj"
+COPY ["Sgd.Api/Sgd.Api.csproj", "Sgd.Api/"]
+COPY ["Sgd.Application/Sgd.Application.csproj", "Sgd.Application/"]
+COPY ["Sgd.Contracts/Sgd.Contracts.csproj", "Sgd.Contracts/"]
+COPY ["Sgd.Domain/Sgd.Domain.csproj", "Sgd.Domain/"]
+COPY ["Sgd.Infrastructure/Sgd.Infrastructure.csproj", "Sgd.Infrastructure/"]
+
+RUN dotnet restore "Sgd.Api/Sgd.Api.csproj"
 COPY . .
-WORKDIR "/src/sgd.api"
-RUN dotnet build "sgd.api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/Sgd.Api"
+RUN dotnet build "Sgd.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "sgd.api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Sgd.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "sgd.api.dll"]
+ENTRYPOINT ["dotnet", "Sgd.Api.dll"]

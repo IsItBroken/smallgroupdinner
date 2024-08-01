@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using Sgd.Application.Common.Interfaces;
 using Sgd.Domain.Common;
 using Sgd.Domain.DinnerAggregate;
+using Sgd.Domain.UserAggregate;
 using Sgd.Infrastructure.Middleware;
 
 namespace Sgd.Infrastructure.Persistence;
@@ -25,6 +26,7 @@ public class SgdDbContext : IUnitOfWork
     private readonly List<AggregateRoot<ObjectId>> _updatedAggregateRootsInSession = [];
 
     public IMongoCollection<Dinner> Dinners => _database.GetCollection<Dinner>("dinners");
+    public IMongoCollection<User> Users => _database.GetCollection<User>("users");
 
     public SgdDbContext(
         IMongoClient client,
@@ -126,7 +128,7 @@ public class SgdDbContext : IUnitOfWork
         {
             throw new InvalidOperationException("HttpContext is null");
         }
-        
+
         Queue<IDomainEvent> domainEventsQueue =
             _httpContextAccessor.HttpContext.Items.TryGetValue(
                 EventualConsistencyMiddleware.DomainEventsKey,

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using MongoDB.Bson;
 using Sgd.Api.Models.Dinners;
 using Sgd.Application.Dinners.Commands.AddDinner;
@@ -8,6 +9,7 @@ using Sgd.Application.Dinners.Queries.SearchDinners;
 namespace Sgd.Api.Controllers;
 
 [Route("[controller]")]
+[Authorize]
 public class DinnerController(ISender sender) : ApiController
 {
     [HttpGet("{id}", Name = nameof(GetDinnerById))]

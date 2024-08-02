@@ -57,5 +57,16 @@ public class GroupProfile : AggregateRoot<ObjectId>
         return Status == GroupProfileStatus.Active;
     }
 
+    public ErrorOr<Success> UpdateRole(GroupRole role)
+    {
+        if (Role == role)
+        {
+            return Result.Success;
+        }
+
+        Role = role;
+        return Result.Success;
+    }
+
     private GroupProfile() { }
 }

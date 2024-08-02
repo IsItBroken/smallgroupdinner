@@ -6,6 +6,7 @@ using Sgd.Application.Groups.Commands.AddGroup;
 using Sgd.Application.Groups.Commands.JoinGroup;
 using Sgd.Application.Groups.Commands.LeaveGroup;
 using Sgd.Application.Groups.Commands.UpdateGroup;
+using Sgd.Application.Groups.Commands.UpdateGroupRole;
 using Sgd.Application.Groups.Queries.Common;
 using Sgd.Application.Groups.Queries.GetGroupById;
 using Sgd.Application.Groups.Queries.GetMembers;
@@ -173,6 +174,32 @@ public class GroupController(ISender sender) : ApiController
             userObjectId,
             request.Accepted
         );
+
+        var result = await sender.Send(command);
+        return result.Match(_ => Ok(), Problem);
+    }
+
+    [HttpPost("{groupId}/update-role")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateGroupRole(
+        [FromRoute] string groupId,
+        [FromBody] UpdateGroupRoleRequest request
+    )
+    {
+        if (!ObjectId.TryParse(groupId, out var groupObjectId))
+        {
+            return NotFound();
+        }
+
+        if (!ObjectId.TryParse(request.UserId, out var userObjectId))
+        {
+            return BadRequest("Invalid user id");
+        }
+
+        var command = new UpdateGroupRoleCommand(groupObjectId, userObjectId, request.Role);
 
         var result = await sender.Send(command);
         return result.Match(_ => Ok(), Problem);

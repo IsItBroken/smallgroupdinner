@@ -43,4 +43,9 @@ public static class GroupErrors
         "Group.NameInUse",
         "Group name is already in use"
     );
+
+    public static readonly Error InvalidRole = Error.Validation(
+        "Group.InvalidRole",
+        "Invalid role"
+    );
 }

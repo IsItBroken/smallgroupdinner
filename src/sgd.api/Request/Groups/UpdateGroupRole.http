@@ -1,0 +1,13 @@
+@groupId=66ac495917004b18d8c7d506
+@userId=66ac0df7c077ddf053ffdd42
+@role=group.member
+
+### Update Group Role
+POST {{sgdApiHost}}/Group/{{groupId}}/update-role
+Content-Type: application/json
+Authorization: Bearer {{$auth.token("api")}}
+
+{
+    "userId": "{{userId}}",
+    "role": "{{role}}"
+}

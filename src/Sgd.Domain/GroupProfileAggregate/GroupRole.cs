@@ -27,4 +27,9 @@ public class GroupRole(string name, string value) : SmartEnum<GroupRole, string>
 
         return false;
     }
+
+    public static bool IsValid(string role)
+    {
+        return TryFromValue(role, out _);
+    }
 }

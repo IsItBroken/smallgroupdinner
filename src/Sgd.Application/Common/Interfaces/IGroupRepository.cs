@@ -13,4 +13,6 @@ public interface IGroupRepository
     Task<List<Group>> GetGroupsByIds(List<ObjectId> ids, CancellationToken cancellationToken);
 
     Task<List<Group>> SearchGroups(string? name, CancellationToken cancellationToken);
+
+    Task<bool> IsNameInUse(string name);
 }

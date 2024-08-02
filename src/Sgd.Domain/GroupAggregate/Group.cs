@@ -56,18 +56,21 @@ public class Group : AggregateRoot<ObjectId>
         return group;
     }
 
-    public ErrorOr<Success> AddMember(User user, GroupRole role)
+    public ErrorOr<string> AddMember(User user, GroupRole role)
     {
         if (_memberIds.Contains(user.Id))
         {
             return GroupErrors.UserAlreadyAssigned;
         }
 
-        var profile = new GroupProfile(Id, user.Id, role);
+        var status = IsOpen ? GroupProfileStatus.Active : GroupProfileStatus.Pending;
+        var profile = new GroupProfile(Id, user.Id, role, status);
         _memberIds.Add(user.Id);
 
         _domainEvents.Add(new GroupProfileCreatedEvent(profile));
-        return Result.Success;
+        return IsOpen
+            ? "Request to join group accepted"
+            : "Request to join group sent to group admin";
     }
 
     public ErrorOr<Success> RemoveMember(User user)

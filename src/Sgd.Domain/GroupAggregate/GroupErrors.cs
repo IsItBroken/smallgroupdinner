@@ -23,4 +23,24 @@ public static class GroupErrors
         "Group.GroupAlreadyDeleted",
         "Group is already deleted"
     );
+
+    public static readonly Error NotMember = Error.Forbidden(
+        "Group.NotMember",
+        "User is not a member of the group"
+    );
+
+    public static readonly Error NotAdmin = Error.Forbidden(
+        "Group.NotAdmin",
+        "User is not an admin of the group"
+    );
+
+    public static readonly Error GroupActionNotAllowed = Error.Forbidden(
+        "Group.GroupActionNotAllowed",
+        "Group action is not allowed"
+    );
+
+    public static readonly Error NameInUse = Error.Conflict(
+        "Group.NameInUse",
+        "Group name is already in use"
+    );
 }

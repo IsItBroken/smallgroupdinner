@@ -1,0 +1,13 @@
+@groupId=66ac495917004b18d8c7d506
+@userId=66ac0df7c077ddf053ffdd42
+@accepted=true
+
+### Decide Group Join Request
+POST {{sgdApiHost}}/Group/{{groupId}}/decide-group-request
+Content-Type: application/json
+Authorization: Bearer {{$auth.token("api")}}
+
+{
+  "userId": "{{userId}}",
+  "accepted": {{accepted}}
+}

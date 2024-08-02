@@ -34,6 +34,11 @@ public class GroupProfileRepository(SgdDbContext dbContext, IUnitOfWork unitOfWo
             .FirstOrDefaultAsync(cancellationToken);
     }
 
+    public async Task<List<GroupProfile>> GetGroupProfilesByGroupId(ObjectId groupId)
+    {
+        return await dbContext.GroupProfiles.Find(p => p.GroupId == groupId).ToListAsync();
+    }
+
     public async Task<GroupProfile?> GetGroupProfileByGroupAndUser(
         ObjectId groupId,
         ObjectId userId

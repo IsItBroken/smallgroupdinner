@@ -1,19 +1,20 @@
 using Sgd.Application.Common.Interfaces;
 using Sgd.Application.Common.Messaging;
 using Sgd.Domain.GroupAggregate;
+using Sgd.Domain.GroupProfileAggregate;
 using Sgd.Domain.UserAggregate;
 
-namespace Sgd.Application.Groups.Commands.AddGroup;
+namespace Sgd.Application.Groups.Commands.JoinGroup;
 
-public class AddGroupCommandHandler(
+public class JoinGroupCommandHandler(
     IGroupRepository groupRepository,
     ICurrentUserProvider currentUserProvider,
     IUserRepository userRepository,
     IUnitOfWork unitOfWork
-) : ICommandHandler<AddGroupCommand, ObjectId>
+) : ICommandHandler<JoinGroupCommand, JoinGroupResponse>
 {
-    public async Task<ErrorOr<ObjectId>> Handle(
-        AddGroupCommand request,
+    public async Task<ErrorOr<JoinGroupResponse>> Handle(
+        JoinGroupCommand request,
         CancellationToken cancellationToken
     )
     {
@@ -29,28 +30,21 @@ public class AddGroupCommandHandler(
             return UserErrors.NotFound;
         }
 
-        var groupNameInUse = await groupRepository.IsNameInUse(request.Name);
-        if (groupNameInUse)
+        var group = await groupRepository.GetGroupById(request.GroupId, cancellationToken);
+        if (group is null)
         {
-            return GroupErrors.NameInUse;
+            return GroupErrors.NotFound;
         }
 
-        var group = Group.CreateGroup(
-            request.Name,
-            request.Description,
-            request.IsOpen,
-            request.ImageUrl,
-            user
-        );
-
-        if (group.IsError)
+        var addMemberResult = group.AddMember(user, GroupRole.Member);
+        if (addMemberResult.IsError)
         {
-            return group.Errors;
+            return addMemberResult.Errors;
         }
 
-        groupRepository.AddGroup(group.Value);
+        groupRepository.UpdateGroup(group);
         await unitOfWork.CommitOperations();
 
-        return group.Value.Id;
+        return new JoinGroupResponse(addMemberResult.Value);
     }
 }

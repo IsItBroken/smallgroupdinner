@@ -1,0 +1,4 @@
+### My Groups
+GET {{sgdApiHost}}/Group/my-groups
+Content-Type: application/json
+Authorization: Bearer {{$auth.token("api")}}

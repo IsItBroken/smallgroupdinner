@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Sgd.Application.Common.Behaviors;
+using Sgd.Application.Groups.Services;
 
 namespace Sgd.Application;
 
@@ -17,6 +18,8 @@ public static class DependencyInjection
         });
 
         builder.Services.AddValidatorsFromAssemblyContaining(typeof(DependencyInjection));
+
+        builder.Services.AddScoped<GroupMemberService>();
 
         return builder;
     }

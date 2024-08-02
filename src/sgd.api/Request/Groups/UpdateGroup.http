@@ -1,0 +1,12 @@
+@groupId=66ac495917004b18d8c7d506
+
+### Update Group
+PUT {{sgdApiHost}}/Group/{{groupId}}
+Content-Type: application/json
+Authorization: Bearer {{$auth.token("api")}}
+
+{
+  "name": "Test Group",
+  "description": "This is a test group",
+  "isOpen": false
+}

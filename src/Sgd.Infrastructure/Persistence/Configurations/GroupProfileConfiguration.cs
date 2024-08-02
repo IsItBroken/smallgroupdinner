@@ -11,5 +11,6 @@ public class GroupProfileConfiguration : BsonClassMap<GroupProfile>
         MapMember(a => a.Role).SetElementName(nameof(GroupProfile.Role).Camelize());
         MapMember(a => a.NotifyOnNewDinner)
             .SetElementName(nameof(GroupProfile.NotifyOnNewDinner).Camelize());
+        MapMember(a => a.Status).SetElementName(nameof(GroupProfile.Status).Camelize());
     }
 }

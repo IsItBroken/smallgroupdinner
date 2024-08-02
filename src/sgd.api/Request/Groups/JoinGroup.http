@@ -1,0 +1,9 @@
+@groupId=66ac495917004b18d8c7d506
+
+### Join Group
+POST {{sgdApiHost}}/Group/{{groupId}}/join
+Content-Type: application/json
+Authorization: Bearer {{$auth.token("api")}}
+
+{
+}

@@ -38,4 +38,11 @@ public class GroupRepository(SgdDbContext dbContext, IUnitOfWork unitOfWork) : I
         var filter = Builders<Group>.Filter.Regex(o => o.Name, nameExpression);
         return await dbContext.Groups.Find(filter).ToListAsync(cancellationToken);
     }
+
+    public async Task<bool> IsNameInUse(string name)
+    {
+        var nameExpression = $"/.*{name}.*/i";
+        var filter = Builders<Group>.Filter.Regex(o => o.Name, nameExpression);
+        return await dbContext.Groups.Find(filter).AnyAsync();
+    }
 }

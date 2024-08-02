@@ -1,0 +1,9 @@
+@groupId=66ac495917004b18d8c7d506
+
+### Leave Group
+POST {{sgdApiHost}}/Group/{{groupId}}/leave
+Content-Type: application/json
+Authorization: Bearer {{$auth.token("api")}}
+
+{
+}

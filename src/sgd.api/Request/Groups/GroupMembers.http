@@ -1,0 +1,6 @@
+@groupId=66ac495917004b18d8c7d506
+
+### Get Group Members
+GET {{sgdApiHost}}/Group/{{groupId}}/members
+Content-Type: application/json
+Authorization: Bearer {{$auth.token("api")}}

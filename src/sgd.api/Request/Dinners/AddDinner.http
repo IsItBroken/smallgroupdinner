@@ -1,0 +1,14 @@
+### Add Dinner
+POST {{sgdApiHost}}/Dinner
+Content-Type: application/json
+Authorization: Bearer {{$auth.token("api")}}
+
+{
+  "name": "Community BBQ",
+  "date": "2024-09-15T18:00:00Z",
+  "description": "A fun BBQ for the whole community.",
+  "capacity": 50,
+  "signUpMethod": "FirstComeFirstServe",
+  "randomSelectionTime": null,
+  "imageUrl": null
+}

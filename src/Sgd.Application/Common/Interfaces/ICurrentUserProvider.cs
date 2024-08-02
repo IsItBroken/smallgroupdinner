@@ -1,4 +1,5 @@
 using Sgd.Application.Common.Models;
+using Sgd.Domain.UserAggregate;
 
 namespace Sgd.Application.Common.Interfaces;
 
@@ -10,6 +11,8 @@ public interface ICurrentUserProvider
     );
 
     CurrentUser? GetCurrentUser();
+
+    Task<ErrorOr<User>> GetUserDomain();
 
     IReadOnlyList<string> GetCurrentUserTokenPermissions();
 

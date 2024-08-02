@@ -4,6 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Sgd.Application.Common.Interfaces;
 using Sgd.Application.Common.Models;
+using Sgd.Domain.UserAggregate;
 
 namespace Sgd.Infrastructure.CIAM.Auth0;
 
@@ -30,6 +31,39 @@ public class GetCurrentUserForAuth0(
         var permissions = GetCurrentUserTokenPermissions();
         var roles = GetClaimValues(ClaimTypes.Role);
         return new CurrentUser(Id: userId.Value, Permissions: permissions, Roles: roles);
+    }
+
+    public async Task<ErrorOr<User>> GetUserDomain()
+    {
+        var auth0UserId = GetTokenSub();
+        if (auth0UserId is null)
+        {
+            logger.LogDebug("Sub claim not found in user claims");
+            return ICurrentUserProvider.NotFoundError;
+        }
+
+        var (system, identifier) = Auth0TokenUtility.GetSystemAndId(auth0UserId);
+        if (string.IsNullOrEmpty(system) || string.IsNullOrEmpty(identifier))
+        {
+            logger.LogDebug(
+                "Auth0 PatientAccessId is not in the expected format: {Auth0Id}",
+                auth0UserId
+            );
+            return ICurrentUserProvider.NotFoundError;
+        }
+
+        var user = await userRepository.GetUserByAlias(identifier, system);
+        if (user is null)
+        {
+            logger.LogDebug(
+                "User not found for system: {System} and identifier: {Identifier}",
+                system,
+                identifier
+            );
+            return ICurrentUserProvider.NotFoundError;
+        }
+
+        return user;
     }
 
     public IReadOnlyList<string> GetCurrentUserTokenPermissions()

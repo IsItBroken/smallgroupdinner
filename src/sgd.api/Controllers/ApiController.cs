@@ -22,6 +22,11 @@ public class ApiController : ControllerBase
             return NotFound(errors[0]);
         }
 
+        if (errors.All(error => error.Type == ErrorType.Forbidden))
+        {
+            return Forbid();
+        }
+
         return Problem(errors[0]);
     }
 

@@ -36,6 +36,9 @@ public class DinnerController(ISender sender) : ApiController
             request.Name,
             request.Date,
             request.Description,
+            request.Capacity,
+            request.SignUpMethod,
+            request.RandomSelectionTime,
             request.ImageUrl
         );
 

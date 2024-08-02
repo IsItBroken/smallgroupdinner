@@ -1,0 +1,9 @@
+@dinnerId=66ad46ed72228e112bd5cc30
+
+### Sign Up For Dinner
+POST {{sgdApiHost}}/Dinner/{{dinnerId}}/sign-up
+Content-Type: application/json
+Authorization: Bearer {{$auth.token("api")}}
+
+{
+}

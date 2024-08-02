@@ -30,4 +30,9 @@ public static class DinnerErrors
         "Dinner.AlreadyInWaitList",
         "User is already in the wait list."
     );
+
+    public static Error AlreadySignedUp = Error.Conflict(
+        "Dinner.AlreadySignedUp",
+        "User is already signed up."
+    );
 }

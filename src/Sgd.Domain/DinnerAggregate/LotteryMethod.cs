@@ -32,7 +32,7 @@ public class LotteryMethod : SignUpMethod
         {
             if (dinner.SignUps.All(s => s.UserId != hostId))
             {
-                dinner.AddSignUp(new SignUp(hostId));
+                dinner.AddSignUpFromMethod(new SignUp(hostId));
             }
         }
 
@@ -42,7 +42,7 @@ public class LotteryMethod : SignUpMethod
             .Take(availableSlots)
             .ToList();
 
-        participants.ForEach(p => dinner.AddSignUp(p));
+        participants.ForEach(p => dinner.AddSignUpFromMethod(p));
         dinner.WaitList.Except(participants).ToList().ForEach(p => dinner.AddToWaitList(p));
         dinner.UpdateSignUpMethod(new FirstComeFirstServeMethod());
     }

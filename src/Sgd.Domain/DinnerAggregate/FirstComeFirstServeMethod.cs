@@ -7,7 +7,7 @@ public class FirstComeFirstServeMethod : SignUpMethod
     public override void AddSignUp(Dinner dinner, SignUp signUp)
     {
         if (dinner.SignUps.Count < dinner.Capacity)
-            dinner.AddSignUp(signUp);
+            dinner.AddSignUpFromMethod(signUp);
         else
             dinner.AddToWaitList(signUp);
     }
@@ -26,7 +26,7 @@ public class FirstComeFirstServeMethod : SignUpMethod
         {
             if (dinner.SignUps.All(s => s.UserId != hostId))
             {
-                dinner.AddSignUp(new SignUp(hostId));
+                dinner.AddSignUpFromMethod(new SignUp(hostId));
             }
         }
 
@@ -37,7 +37,7 @@ public class FirstComeFirstServeMethod : SignUpMethod
                 && dinner.SignUps.Count < dinner.Capacity
             )
             {
-                dinner.AddSignUp(signUp);
+                dinner.AddSignUpFromMethod(signUp);
             }
             else
             {

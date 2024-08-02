@@ -91,6 +91,17 @@ public class Dinner : AggregateRoot<ObjectId>
         return Result.Success;
     }
 
+    internal ErrorOr<Success> AddSignUpFromMethod(SignUp signUp)
+    {
+        if (_signUps.Any(s => s.UserId == signUp.UserId))
+        {
+            return DinnerErrors.AlreadySignedUp;
+        }
+
+        _signUps.Add(signUp);
+        return Result.Success;
+    }
+
     public ErrorOr<Success> RemoveSignUp(ObjectId userId)
     {
         var signUp = _signUps.FirstOrDefault(s => s.UserId == userId);
@@ -114,6 +125,7 @@ public class Dinner : AggregateRoot<ObjectId>
         {
             return DinnerErrors.AlreadyInWaitList;
         }
+
         _waitList.Add(signUp);
         return Result.Success;
     }

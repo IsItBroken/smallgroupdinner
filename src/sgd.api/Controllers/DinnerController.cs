@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using MongoDB.Bson;
 using Sgd.Api.Models.Dinners;
 using Sgd.Application.Dinners.Commands.AddDinner;
+using Sgd.Application.Dinners.Commands.SIgnUpForDinner;
 using Sgd.Application.Dinners.Queries.Common;
 using Sgd.Application.Dinners.Queries.GetDinnerById;
 using Sgd.Application.Dinners.Queries.SearchDinners;
@@ -56,5 +57,21 @@ public class DinnerController(ISender sender) : ApiController
         var query = new SearchDinnersQuery(name);
         var result = await sender.Send(query);
         return result.Match(Ok, Problem);
+    }
+
+    [HttpPost("{id}/sign-up")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> SignUpForDinner([FromRoute] string id)
+    {
+        if (!ObjectId.TryParse(id, out var dinnerId))
+        {
+            return NotFound();
+        }
+
+        var command = new SignUpForDinnerCommand(dinnerId);
+        var result = await sender.Send(command);
+        return result.Match(_ => NoContent(), Problem);
     }
 }

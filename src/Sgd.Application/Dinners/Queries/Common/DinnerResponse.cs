@@ -29,7 +29,7 @@ public sealed class DinnerResponse
             ImageUrl = dinner.ImageUrl,
             Date = dinner.Date,
             Capacity = dinner.Capacity,
-            SignUpMethod = dinner.SignUpMethod.GetType().Name,
+            SignUpMethod = dinner.SignUpMethod.Name,
             RandomSelectionTime = dinner.RandomSelectionTime,
             Hosts = dinner
                 .Hosts.Select(hostId => UserResponse.FromDomain(userDictionary[hostId.ToString()]))

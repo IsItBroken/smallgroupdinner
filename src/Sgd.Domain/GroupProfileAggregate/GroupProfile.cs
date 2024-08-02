@@ -1,8 +1,8 @@
 using Sgd.Domain.Common;
 
-namespace Sgd.Domain.GroupAggregate;
+namespace Sgd.Domain.GroupProfileAggregate;
 
-public class GroupProfile : Entity<ObjectId>
+public class GroupProfile : AggregateRoot<ObjectId>
 {
     public ObjectId GroupId { get; private set; }
 

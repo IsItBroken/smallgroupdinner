@@ -1,0 +1,4 @@
+### Search Groups
+GET {{sgdApiHost}}/Group/search?name=Test1
+Content-Type: application/json
+Authorization: Bearer {{$auth.token("api")}}

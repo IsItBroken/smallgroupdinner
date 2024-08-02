@@ -1,0 +1,10 @@
+### Add Group
+POST {{sgdApiHost}}/Group
+Content-Type: application/json
+Authorization: Bearer {{$auth.token("api")}}
+
+{
+  "name": "Test Group",
+  "description": "This is a test group",
+  "isOpen": true
+}

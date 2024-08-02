@@ -12,7 +12,7 @@ namespace Sgd.Api.Controllers;
 [Authorize]
 public class DinnerController(ISender sender) : ApiController
 {
-    [HttpGet("{id}", Name = nameof(GetDinnerById))]
+    [HttpGet("{id}")]
     [ProducesResponseType(typeof(DinnerResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDinnerById([FromRoute] string id)

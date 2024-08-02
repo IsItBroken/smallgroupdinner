@@ -13,5 +13,7 @@ public class UserConfiguration : BsonClassMap<User>
         MapMember(a => a.Email).SetElementName(nameof(User.Email).Camelize());
 
         MapMember(a => a.Aliases).SetElementName(nameof(User.Aliases).Camelize());
+
+        MapField("_groupIds").SetElementName("groupIds");
     }
 }

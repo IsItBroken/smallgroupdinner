@@ -6,6 +6,8 @@ using MongoDB.Driver;
 using Sgd.Application.Common.Interfaces;
 using Sgd.Domain.Common;
 using Sgd.Domain.DinnerAggregate;
+using Sgd.Domain.GroupAggregate;
+using Sgd.Domain.GroupProfileAggregate;
 using Sgd.Domain.UserAggregate;
 using Sgd.Infrastructure.Middleware;
 
@@ -26,6 +28,9 @@ public class SgdDbContext : IUnitOfWork
     private readonly List<AggregateRoot<ObjectId>> _updatedAggregateRootsInSession = [];
 
     public IMongoCollection<Dinner> Dinners => _database.GetCollection<Dinner>("dinners");
+    public IMongoCollection<Group> Groups => _database.GetCollection<Group>("groups");
+    public IMongoCollection<GroupProfile> GroupProfiles =>
+        _database.GetCollection<GroupProfile>("groupProfiles");
     public IMongoCollection<User> Users => _database.GetCollection<User>("users");
 
     public SgdDbContext(

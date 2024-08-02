@@ -85,6 +85,8 @@ public static class DependencyInjection
         builder.Services.AddScoped<IUnitOfWork, SgdDbContext>();
 
         builder.Services.AddScoped<IDinnerRepository, DinnerRepository>();
+        builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+        builder.Services.AddScoped<IGroupProfileRepository, GroupProfileRepository>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
 
         return builder;

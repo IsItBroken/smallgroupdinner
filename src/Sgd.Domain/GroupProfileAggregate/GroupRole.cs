@@ -1,4 +1,4 @@
-namespace Sgd.Domain.GroupAggregate;
+namespace Sgd.Domain.GroupProfileAggregate;
 
 public class GroupRole(string name, string value) : SmartEnum<GroupRole, string>(name, value)
 {

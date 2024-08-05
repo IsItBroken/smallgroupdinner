@@ -1,6 +1,7 @@
 using Sgd.Application.Common.Interfaces;
 using Sgd.Application.Common.Messaging;
 using Sgd.Application.Dinners.Queries.Common;
+using Sgd.Application.Dinners.Services;
 using Sgd.Domain.DinnerAggregate;
 
 namespace Sgd.Application.Dinners.Queries.GetDinnerById;
@@ -21,12 +22,7 @@ public sealed class GetDinnerByIdQueryHandler(
             return DinnerErrors.NotFound;
         }
 
-        var userIds = dinner
-            .Hosts.Concat(dinner.SignUps.Select(s => s.UserId))
-            .Concat(dinner.WaitList.Select(w => w.UserId))
-            .Distinct()
-            .ToList();
-
+        var userIds = DinnerUserHelper.GetUserIdsInvolvedInDinner(dinner);
         var users = await userRepository.GetUsers(userIds);
 
         return DinnerResponse.FromDomain(dinner, users);

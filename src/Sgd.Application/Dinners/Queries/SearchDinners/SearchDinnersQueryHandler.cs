@@ -1,6 +1,7 @@
 using Sgd.Application.Common.Interfaces;
 using Sgd.Application.Common.Messaging;
 using Sgd.Application.Dinners.Queries.Common;
+using Sgd.Application.Dinners.Services;
 
 namespace Sgd.Application.Dinners.Queries.SearchDinners;
 
@@ -16,16 +17,7 @@ internal sealed class SearchDinnersQueryHandler(
     {
         var dinners = await dinnerRepository.SearchDinners(request.Name, cancellationToken);
 
-        // Collect all user IDs from the dinners
-        var userIds = dinners
-            .SelectMany(dinner =>
-                dinner
-                    .Hosts.Concat(dinner.SignUps.Select(s => s.UserId))
-                    .Concat(dinner.WaitList.Select(w => w.UserId))
-            )
-            .Distinct()
-            .ToList();
-
+        var userIds = DinnerUserHelper.GetUserIdsInvolvedInDinners(dinners);
         var users = await userRepository.GetUsers(userIds);
         return dinners.Select(dinner => DinnerResponse.FromDomain(dinner, users)).ToList();
     }

@@ -31,4 +31,12 @@ public class DinnerRepository(SgdDbContext dbContext, IUnitOfWork unitOfWork) : 
         var filter = Builders<Dinner>.Filter.Regex(o => o.Name, nameExpression);
         return await dbContext.Dinners.Find(filter).ToListAsync(cancellationToken);
     }
+
+    public async Task<List<Dinner>> GetDinnersByIds(
+        List<ObjectId> ids,
+        CancellationToken cancellationToken
+    )
+    {
+        return await dbContext.Dinners.Find(p => ids.Contains(p.Id)).ToListAsync(cancellationToken);
+    }
 }

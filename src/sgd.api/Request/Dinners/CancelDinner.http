@@ -1,0 +1,9 @@
+@dinnerId=66b04b18026ff2ab08326c5f
+
+### Cancel Dinner
+POST {{sgdApiHost}}/Dinner/{{dinnerId}}/cancel
+Content-Type: application/json
+Authorization: Bearer {{$auth.token("api")}}
+
+{
+}

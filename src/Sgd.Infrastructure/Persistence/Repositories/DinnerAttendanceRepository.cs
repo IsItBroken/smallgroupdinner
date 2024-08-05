@@ -66,4 +66,23 @@ public class DinnerAttendanceRepository(SgdDbContext dbContext, IUnitOfWork unit
             .DinnerAttendances.Find(p => p.DinnerId == dinnerId)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<DinnerAttendance?> GetDinnerAttendancesForDinner(
+        ObjectId dinnerId,
+        ObjectId userId,
+        CancellationToken cancellationToken
+    )
+    {
+        return await dbContext
+            .DinnerAttendances.Find(p => p.DinnerId == dinnerId && p.UserId == userId)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public void RemoveDinnerAttendance(DinnerAttendance dinnerAttendance)
+    {
+        unitOfWork.AddOperation(
+            dinnerAttendance,
+            () => dbContext.DinnerAttendances.DeleteOneAsync(x => x.Id == dinnerAttendance.Id)
+        );
+    }
 }

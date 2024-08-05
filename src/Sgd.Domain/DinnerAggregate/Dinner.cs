@@ -89,7 +89,7 @@ public class Dinner : AggregateRoot<ObjectId>
         );
 
         var creatorSignUp = new SignUp(creator.Id);
-        dinner._signUps.Add(creatorSignUp);
+        dinner.AddSignUpFromMethod(creatorSignUp);
 
         return dinner;
     }
@@ -141,12 +141,22 @@ public class Dinner : AggregateRoot<ObjectId>
 
     public ErrorOr<Success> AddSignUp(SignUp signUp)
     {
-        SignUpMethod.AddSignUp(this, signUp);
+        if (IsCancelled)
+        {
+            return DinnerErrors.DinnerIsCanceled;
+        }
+
+        AddSignUpFromMethod(signUp);
         return Result.Success;
     }
 
     internal ErrorOr<Success> AddSignUpFromMethod(SignUp signUp)
     {
+        if (IsCancelled)
+        {
+            return DinnerErrors.DinnerIsCanceled;
+        }
+
         if (_signUps.Any(s => s.UserId == signUp.UserId))
         {
             return DinnerErrors.AlreadySignedUp;
@@ -159,6 +169,16 @@ public class Dinner : AggregateRoot<ObjectId>
 
     public ErrorOr<Success> RemoveSignUp(ObjectId userId)
     {
+        if (IsCancelled)
+        {
+            return DinnerErrors.DinnerIsCanceled;
+        }
+
+        if (_hosts.Contains(userId))
+        {
+            return DinnerErrors.HostCannotBeRemoved;
+        }
+
         var signUp = _signUps.FirstOrDefault(s => s.UserId == userId);
         if (signUp == null)
         {
@@ -166,16 +186,28 @@ public class Dinner : AggregateRoot<ObjectId>
         }
 
         _signUps.Remove(signUp);
+        _domainEvents.Add(new CancelledSignUpEvent(this, signUp));
         return Result.Success;
     }
 
-    public void ProcessWaitList()
+    public ErrorOr<Success> ProcessWaitList()
     {
+        if (IsCancelled)
+        {
+            return DinnerErrors.DinnerIsCanceled;
+        }
+
         SignUpMethod.ProcessWaitList(this);
+        return Result.Success;
     }
 
     public ErrorOr<Success> AddToWaitList(SignUp signUp)
     {
+        if (IsCancelled)
+        {
+            return DinnerErrors.DinnerIsCanceled;
+        }
+
         if (_waitList.Any(s => s.UserId == signUp.UserId))
         {
             return DinnerErrors.AlreadyInWaitList;
@@ -188,6 +220,11 @@ public class Dinner : AggregateRoot<ObjectId>
 
     public ErrorOr<Success> RemoveFromWaitList(ObjectId userId)
     {
+        if (IsCancelled)
+        {
+            return DinnerErrors.DinnerIsCanceled;
+        }
+
         var signUp = _waitList.FirstOrDefault(s => s.UserId == userId);
         if (signUp == null)
         {
@@ -200,6 +237,11 @@ public class Dinner : AggregateRoot<ObjectId>
 
     public ErrorOr<Success> MoveFromWaitListToSignUps(SignUp signUp)
     {
+        if (IsCancelled)
+        {
+            return DinnerErrors.DinnerIsCanceled;
+        }
+
         if (!_waitList.Contains(signUp))
         {
             return DinnerErrors.SignUpNotFound;
@@ -217,6 +259,11 @@ public class Dinner : AggregateRoot<ObjectId>
 
     public ErrorOr<Success> UpdateSignUpMethod(SignUpMethod signUpMethod)
     {
+        if (IsCancelled)
+        {
+            return DinnerErrors.DinnerIsCanceled;
+        }
+
         if (DateTime.UtcNow > RandomSelectionTime)
         {
             // If it's after the random selection time, just update the method
@@ -234,6 +281,11 @@ public class Dinner : AggregateRoot<ObjectId>
 
     public ErrorOr<Success> UpdateRandomSelectionTime(DateTime newRandomSelectionTime)
     {
+        if (IsCancelled)
+        {
+            return DinnerErrors.DinnerIsCanceled;
+        }
+
         if (newRandomSelectionTime > Date)
         {
             return DinnerErrors.RandomSelectionTimeMustBeBeforeDinnerDate;
@@ -252,6 +304,11 @@ public class Dinner : AggregateRoot<ObjectId>
 
     public ErrorOr<Success> AddHost(ObjectId hostId)
     {
+        if (IsCancelled)
+        {
+            return DinnerErrors.DinnerIsCanceled;
+        }
+
         if (_hosts.Contains(hostId))
         {
             return DinnerErrors.HostAlreadyAdded;
@@ -272,6 +329,11 @@ public class Dinner : AggregateRoot<ObjectId>
 
     public ErrorOr<Success> RemoveHost(ObjectId hostId)
     {
+        if (IsCancelled)
+        {
+            return DinnerErrors.DinnerIsCanceled;
+        }
+
         if (!_hosts.Contains(hostId))
         {
             return DinnerErrors.HostNotFound;
@@ -306,16 +368,6 @@ public class Dinner : AggregateRoot<ObjectId>
         IsCancelled = true;
         _domainEvents.Add(new DinnerCanceledEvent(this));
         return Result.Success;
-    }
-
-    internal void ClearSignUps()
-    {
-        _signUps.Clear();
-    }
-
-    internal void ClearWaitList()
-    {
-        _waitList.Clear();
     }
 
     private Dinner() { }

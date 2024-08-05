@@ -1,0 +1,16 @@
+@dinnerId=66b04d561718f62d5e810e2b
+
+### Update Dinner
+PUT {{sgdApiHost}}/Dinner/{{dinnerId}}
+Content-Type: application/json
+Authorization: Bearer {{$auth.token("api")}}
+
+{
+  "name": "Gourmet Dinner",
+  "date": "2024-10-08T19:00:00Z",
+  "description": "A gourmet dinner with a lottery sign-up.",
+  "capacity": 25,
+  "signUpMethod": "Lottery",
+  "randomSelectionTime": "2024-10-01T12:00:00Z",
+  "imageUrl": "https://example.com/images/gourmet_dinner.png"
+}

@@ -1,0 +1,11 @@
+@dinnerId=66b05119940b69f19d74d64f
+@hostId=66ac0df7c077ddf053ffdd42
+
+### Remove Host
+POST {{sgdApiHost}}/Dinner/{{dinnerId}}/remove-host
+Content-Type: application/json
+Authorization: Bearer {{$auth.token("api")}}
+
+{
+  "userId": "{{hostId}}"
+}

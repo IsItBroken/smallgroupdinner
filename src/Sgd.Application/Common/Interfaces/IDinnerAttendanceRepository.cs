@@ -25,4 +25,12 @@ public interface IDinnerAttendanceRepository
         ObjectId dinnerId,
         CancellationToken cancellationToken
     );
+
+    Task<DinnerAttendance?> GetDinnerAttendancesForDinner(
+        ObjectId dinnerId,
+        ObjectId userId,
+        CancellationToken cancellationToken
+    );
+
+    void RemoveDinnerAttendance(DinnerAttendance dinnerAttendance);
 }

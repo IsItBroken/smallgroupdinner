@@ -62,4 +62,14 @@ public static class DinnerErrors
         "Dinner.DinnerAlreadyHappened",
         "Dinner has already happened."
     );
+
+    public static Error DinnerIsCanceled = Error.Validation(
+        "Dinner.DinnerIsCanceled",
+        "Dinner is canceled."
+    );
+
+    public static Error HostCannotBeRemoved = Error.Validation(
+        "Dinner.HostCannotBeRemoved",
+        "Host cannot be removed."
+    );
 }

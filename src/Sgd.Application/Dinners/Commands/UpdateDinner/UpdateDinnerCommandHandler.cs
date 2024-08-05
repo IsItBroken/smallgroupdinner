@@ -108,6 +108,7 @@ public class UpdateDinnerCommandHandler(
             return errors;
         }
 
+        dinnerRepository.UpdateDinner(dinner);
         await unitOfWork.CommitOperations();
         return Result.Success;
     }

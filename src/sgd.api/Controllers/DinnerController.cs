@@ -10,6 +10,7 @@ using Sgd.Application.Dinners.Commands.SIgnUpForDinner;
 using Sgd.Application.Dinners.Commands.UpdateDinner;
 using Sgd.Application.Dinners.Queries.Common;
 using Sgd.Application.Dinners.Queries.GetDinnerById;
+using Sgd.Application.Dinners.Queries.GetMyDinners;
 using Sgd.Application.Dinners.Queries.SearchDinners;
 
 namespace Sgd.Api.Controllers;
@@ -199,7 +200,9 @@ public class DinnerController(ISender sender) : ApiController
     [ProducesResponseType(typeof(IReadOnlyList<DinnerResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetMyDinners()
     {
-        return Ok();
+        var query = new GetMyDinnersQuery();
+        var result = await sender.Send(query);
+        return result.Match(Ok, Problem);
     }
 
     [HttpGet("feed")]

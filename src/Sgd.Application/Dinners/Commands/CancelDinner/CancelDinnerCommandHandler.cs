@@ -38,6 +38,7 @@ public class CancelDinnerCommandHandler(
             return result.Errors;
         }
 
+        dinnerRepository.UpdateDinner(dinner);
         await unitOfWork.CommitOperations();
         return Result.Success;
     }

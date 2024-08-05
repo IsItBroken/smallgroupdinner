@@ -22,7 +22,7 @@ public class LotteryMethod : SignUpMethod
     {
         if (DateTime.UtcNow < dinner.RandomSelectionTime)
         {
-            throw new InvalidOperationException("Random selection time has not yet passed.");
+            return;
         }
 
         var random = new Random();

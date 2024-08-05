@@ -35,4 +35,31 @@ public static class DinnerErrors
         "Dinner.AlreadySignedUp",
         "User is already signed up."
     );
+
+    public static Error CapacityCannotBeLessThanCurrentSignUps = Error.Validation(
+        "Dinner.CapacityCannotBeLessThanCurrentSignUps",
+        "Capacity cannot be less than current sign ups."
+    );
+
+    public static Error CapacityCannotBeNegative = Error.Validation(
+        "Dinner.CapacityCannotBeNegative",
+        "Capacity cannot be negative."
+    );
+
+    public static Error DinnerIsFull = Error.Validation("Dinner.DinnerIsFull", "Dinner is full.");
+
+    public static Error CannotUpdateDinner = Error.Forbidden(
+        "Dinner.CannotUpdateDinner",
+        "Cannot update dinner."
+    );
+
+    public static Error DinnerAlreadyCanceled = Error.Conflict(
+        "Dinner.DinnerAlreadyCanceled",
+        "Dinner is already canceled."
+    );
+
+    public static Error DinnerAlreadyHappened = Error.Conflict(
+        "Dinner.DinnerAlreadyHappened",
+        "Dinner has already happened."
+    );
 }

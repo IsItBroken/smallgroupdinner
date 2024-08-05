@@ -12,6 +12,8 @@ public class DinnerConfiguration : BsonClassMap<Dinner>
 
         MapMember(a => a.Description).SetElementName(nameof(Dinner.Description).Camelize());
 
+        MapMember(a => a.GroupId).SetElementName(nameof(Dinner.GroupId).Camelize());
+
         MapMember(a => a.ImageUrl).SetElementName(nameof(Dinner.ImageUrl).Camelize());
 
         MapMember(a => a.Capacity).SetElementName(nameof(Dinner.Capacity).Camelize());
@@ -29,6 +31,6 @@ public class DinnerConfiguration : BsonClassMap<Dinner>
 
         MapMember(a => a.CreatedAt).SetElementName(nameof(Dinner.CreatedAt).Camelize());
 
-        MapMember(a => a.IsDeleted).SetElementName(nameof(Dinner.IsDeleted).Camelize());
+        MapMember(a => a.IsCancelled).SetElementName(nameof(Dinner.IsCancelled).Camelize());
     }
 }

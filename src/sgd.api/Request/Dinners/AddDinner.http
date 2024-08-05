@@ -1,14 +1,17 @@
+@groupId=66ac495917004b18d8c7d506
+
 ### Add Dinner
 POST {{sgdApiHost}}/Dinner
 Content-Type: application/json
 Authorization: Bearer {{$auth.token("api")}}
 
 {
-  "name": "Community BBQ",
-  "date": "2024-09-15T18:00:00Z",
-  "description": "A fun BBQ for the whole community.",
-  "capacity": 50,
-  "signUpMethod": "FirstComeFirstServe",
-  "randomSelectionTime": null,
-  "imageUrl": null
+  "name": "Gourmet Dinner",
+  "date": "2024-10-10T19:00:00Z",
+  "description": "A gourmet dinner with a lottery sign-up.",
+  "groupId": "{{groupId}}",
+  "capacity": 20,
+  "signUpMethod": "Lottery",
+  "randomSelectionTime": "2024-10-01T12:00:00Z",
+  "imageUrl": "https://example.com/images/gourmet_dinner.png"
 }

@@ -14,34 +14,16 @@ public class FirstComeFirstServeMethod : SignUpMethod
 
     public override void ProcessWaitList(Dinner dinner)
     {
-        var combinedList = dinner
-            .SignUps.Concat(dinner.WaitList)
-            .OrderBy(s => s.SignUpDate)
-            .ToList();
-        dinner.ClearSignUps();
-        dinner.ClearWaitList();
-
-        // Re-add hosts to signups first
-        foreach (var hostId in dinner.Hosts)
+        while (dinner.SignUps.Count < dinner.Capacity && dinner.WaitList.Any())
         {
-            if (dinner.SignUps.All(s => s.UserId != hostId))
-            {
-                dinner.AddSignUpFromMethod(new SignUp(hostId));
-            }
-        }
+            var signUp = dinner.WaitList[0];
+            var result = dinner.MoveFromWaitListToSignUps(signUp);
 
-        foreach (var signUp in combinedList)
-        {
-            if (
-                dinner.SignUps.All(s => s.UserId != signUp.UserId)
-                && dinner.SignUps.Count < dinner.Capacity
-            )
+            if (result.IsError)
             {
-                dinner.AddSignUpFromMethod(signUp);
-            }
-            else
-            {
-                dinner.AddToWaitList(signUp);
+                throw new InvalidOperationException(
+                    $"Failed to move user from wait list to sign ups, {result.Errors.First().Description}"
+                );
             }
         }
     }

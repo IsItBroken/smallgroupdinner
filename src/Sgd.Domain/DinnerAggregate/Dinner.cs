@@ -1,4 +1,5 @@
 using Sgd.Domain.Common;
+using Sgd.Domain.DinnerAggregate.Events;
 using Sgd.Domain.UserAggregate;
 
 namespace Sgd.Domain.DinnerAggregate;
@@ -10,6 +11,8 @@ public class Dinner : AggregateRoot<ObjectId>
     public DateTime Date { get; private set; }
 
     public string Description { get; private set; } = null!;
+
+    public ObjectId GroupId { get; private set; }
 
     public string? ImageUrl { get; private set; }
 
@@ -30,12 +33,13 @@ public class Dinner : AggregateRoot<ObjectId>
 
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
-    public bool IsDeleted { get; private set; } = false;
+    public bool IsCancelled { get; private set; } = false;
 
     private Dinner(
         string name,
         DateTime date,
         string description,
+        ObjectId groupId,
         int capacity,
         SignUpMethod signUpMethod,
         string? imageUrl,
@@ -48,17 +52,21 @@ public class Dinner : AggregateRoot<ObjectId>
         Name = name;
         Date = date;
         Description = description;
+        GroupId = groupId;
         Capacity = capacity;
         SignUpMethod = signUpMethod;
         ImageUrl = imageUrl;
         RandomSelectionTime = randomSelectionTime;
         _hosts.Add(creator.Id);
+
+        _domainEvents.Add(new DinnerCreatedEvent(this));
     }
 
     public static Dinner Create(
         string name,
         DateTime date,
         string description,
+        ObjectId groupId,
         int capacity,
         SignUpMethod signUpMethod,
         string? imageUrl,
@@ -71,6 +79,7 @@ public class Dinner : AggregateRoot<ObjectId>
             name,
             date,
             description,
+            groupId,
             capacity,
             signUpMethod,
             imageUrl,
@@ -83,6 +92,51 @@ public class Dinner : AggregateRoot<ObjectId>
         dinner._signUps.Add(creatorSignUp);
 
         return dinner;
+    }
+
+    public ErrorOr<Success> UpdateName(string name)
+    {
+        Name = name;
+        return Result.Success;
+    }
+
+    public ErrorOr<Success> UpdateDescription(string description)
+    {
+        Description = description;
+        return Result.Success;
+    }
+
+    public ErrorOr<Success> UpdateDate(DateTime date)
+    {
+        var oldDate = Date;
+        Date = date;
+
+        _domainEvents.Add(new DinnerDateChangedEvent(this, oldDate));
+        return Result.Success;
+    }
+
+    public ErrorOr<Success> UpdateCapacity(int capacity)
+    {
+        if (capacity < SignUps.Count)
+        {
+            return DinnerErrors.CapacityCannotBeLessThanCurrentSignUps;
+        }
+
+        if (capacity < 0)
+        {
+            return DinnerErrors.CapacityCannotBeNegative;
+        }
+
+        SignUpMethod.ProcessWaitList(this);
+
+        Capacity = capacity;
+        return Result.Success;
+    }
+
+    public ErrorOr<Success> UpdateImageUrl(string? imageUrl)
+    {
+        ImageUrl = imageUrl;
+        return Result.Success;
     }
 
     public ErrorOr<Success> AddSignUp(SignUp signUp)
@@ -99,6 +153,7 @@ public class Dinner : AggregateRoot<ObjectId>
         }
 
         _signUps.Add(signUp);
+        _domainEvents.Add(new SignedUpForDinnerEvent(this, signUp));
         return Result.Success;
     }
 
@@ -127,6 +182,7 @@ public class Dinner : AggregateRoot<ObjectId>
         }
 
         _waitList.Add(signUp);
+        _domainEvents.Add(new AddedToDinnerWaitListEvent(this, signUp));
         return Result.Success;
     }
 
@@ -139,6 +195,23 @@ public class Dinner : AggregateRoot<ObjectId>
         }
 
         _waitList.Remove(signUp);
+        return Result.Success;
+    }
+
+    public ErrorOr<Success> MoveFromWaitListToSignUps(SignUp signUp)
+    {
+        if (!_waitList.Contains(signUp))
+        {
+            return DinnerErrors.SignUpNotFound;
+        }
+
+        if (_signUps.Count >= Capacity)
+        {
+            return DinnerErrors.DinnerIsFull;
+        }
+
+        AddSignUpFromMethod(signUp);
+        RemoveFromWaitList(signUp.UserId);
         return Result.Success;
     }
 
@@ -187,8 +260,13 @@ public class Dinner : AggregateRoot<ObjectId>
         _hosts.Add(hostId);
         if (SignUps.All(s => s.UserId != hostId))
         {
-            AddSignUp(new SignUp(hostId));
+            var addSignupRequest = AddSignUp(new SignUp(hostId));
+            if (addSignupRequest.IsError)
+            {
+                return addSignupRequest.Errors;
+            }
         }
+
         return Result.Success;
     }
 
@@ -205,6 +283,28 @@ public class Dinner : AggregateRoot<ObjectId>
         }
 
         _hosts.Remove(hostId);
+        return Result.Success;
+    }
+
+    public bool CanUserUpdate(User user)
+    {
+        return _hosts.Contains(user.Id);
+    }
+
+    public ErrorOr<Success> CancelDinner()
+    {
+        if (IsCancelled)
+        {
+            return DinnerErrors.DinnerAlreadyCanceled;
+        }
+
+        if (DateTime.UtcNow > Date)
+        {
+            return DinnerErrors.DinnerAlreadyHappened;
+        }
+
+        IsCancelled = true;
+        _domainEvents.Add(new DinnerCanceledEvent(this));
         return Result.Success;
     }
 

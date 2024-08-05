@@ -1,14 +1,14 @@
 using Sgd.Application.Common.Messaging;
 
-namespace Sgd.Application.Dinners.Commands.AddDinner;
+namespace Sgd.Application.Dinners.Commands.UpdateDinner;
 
-public sealed record AddDinnerCommand(
+public record UpdateDinnerCommand(
+    ObjectId Id,
     string Name,
     DateTime Date,
     string Description,
-    ObjectId GroupId,
     int Capacity,
     string SignUpMethod,
     DateTime? RandomSelectionTime,
     string? ImageUrl
-) : ICommand<ObjectId>;
+) : ICommand;

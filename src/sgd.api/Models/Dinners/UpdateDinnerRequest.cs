@@ -1,10 +1,9 @@
 namespace Sgd.Api.Models.Dinners;
 
-public record AddDinnerRequest(
+public record UpdateDinnerRequest(
     string Name,
     DateTime Date,
     string Description,
-    string GroupId,
     int Capacity,
     string SignUpMethod,
     DateTime? RandomSelectionTime,

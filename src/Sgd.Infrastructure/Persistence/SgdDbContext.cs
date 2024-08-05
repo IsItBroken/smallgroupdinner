@@ -27,6 +27,8 @@ public class SgdDbContext : IUnitOfWork
     private readonly List<Action> _operations = [];
     private readonly List<AggregateRoot<ObjectId>> _updatedAggregateRootsInSession = [];
 
+    public IMongoCollection<DinnerAttendance> DinnerAttendances =>
+        _database.GetCollection<DinnerAttendance>("dinnerAttendances");
     public IMongoCollection<Dinner> Dinners => _database.GetCollection<Dinner>("dinners");
     public IMongoCollection<Group> Groups => _database.GetCollection<Group>("groups");
     public IMongoCollection<GroupProfile> GroupProfiles =>

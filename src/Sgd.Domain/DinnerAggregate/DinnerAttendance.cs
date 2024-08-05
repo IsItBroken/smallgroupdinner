@@ -27,4 +27,22 @@ public class DinnerAttendance : AggregateRoot<ObjectId>
     {
         IsUpcoming = false;
     }
+
+    public void WasCanceled()
+    {
+        IsUpcoming = false;
+    }
+
+    public ErrorOr<Success> UpdateDinnerDate(DateTime newDinnerDate)
+    {
+        if (newDinnerDate < DateTime.UtcNow)
+        {
+            return DinnerAttendanceErrors.CannotUpdateDinnerDateToPast;
+        }
+
+        DinnerDate = newDinnerDate;
+        return Result.Success;
+    }
+
+    private DinnerAttendance() { }
 }

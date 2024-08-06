@@ -5,8 +5,11 @@ using Sgd.Infrastructure.CIAM.Auth0;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 {
     builder.AddPresentation().AddApplication().AddInfrastructure();
+
+    builder.Services.AddHealthChecks();
 
     builder.Services.AddCors(options =>
         options.AddPolicy(
@@ -22,22 +25,25 @@ var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 
+
 {
     app.UseCors("AllowAll");
     app.UseExceptionHandler();
-    app.AddInfrastructureMiddleware();
-
-    if (app.Environment.IsDevelopment())
+    if (app.Environment.IsDevelopment() || true)
     {
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "Small Group Dinner API V1");
-            c.RoutePrefix = string.Empty; // Set the Swagger UI at the root
+            c.RoutePrefix = string.Empty;
         });
     }
 
     app.UseHttpsRedirection();
+
+    app.MapHealthChecks("/healthz");
+
+    app.AddInfrastructureMiddleware();
     app.UseAuthentication();
     app.UseAuthorization();
 
@@ -45,5 +51,7 @@ var app = builder.Build();
 
     app.MapControllers();
 
-    app.Run();
+    var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+    var url = $"http://0.0.0.0:{port}";
+    app.Run(url);
 }

@@ -4,6 +4,8 @@ public static class DinnerErrors
 {
     public static Error NotFound = Error.NotFound("Dinner.NotFound", "Dinner not found.");
 
+    public static Error Forbidden = Error.Forbidden("Dinner.Forbidden", "Forbidden.");
+
     public static Error RandomSelectionTimeMustBeBeforeDinnerDate = Error.Validation(
         "Dinner.RandomSelectionTimeMustBeBeforeDinnerDate",
         "Random selection time must be before dinner date."

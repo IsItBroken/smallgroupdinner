@@ -19,7 +19,7 @@ public class UserExistsMiddleware(RequestDelegate next)
             var auth0Id = currentUserProvider.GetTokenSub();
             if (string.IsNullOrEmpty(auth0Id))
             {
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                await next(context);
                 return;
             }
 

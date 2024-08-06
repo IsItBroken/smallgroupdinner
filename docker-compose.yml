@@ -1,0 +1,19 @@
+﻿version: '3.8'
+services:
+  sgddb:
+    image: mongo:7.0
+    container_name: sgddb
+    ports:
+      - "28017:27017"
+    volumes:
+      - mongo-data:/data/db
+  test:
+    image: isitbroken/small-group-dinner:0.3
+    container_name: SgdTest
+    ports:
+      - "8080:8080"
+    environment:
+      - Authentication__Auth0__ClientSecret=J7T_SZagy9hDNu0O6p6WzfpJVnNCpmjstwyXg-bwz81uYOL14n6nslMiP9J3FqsN
+
+volumes:
+  mongo-data:

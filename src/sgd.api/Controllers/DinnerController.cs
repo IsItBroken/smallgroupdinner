@@ -209,6 +209,9 @@ public class DinnerController(ISender sender) : ApiController
     [ProducesResponseType(typeof(IReadOnlyList<DinnerResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetDinnerFeed()
     {
-        return Ok();
+        var query = new SearchDinnersQuery(null);
+        var result = await sender.Send(query);
+
+        return result.Match(dinners => Ok(dinners.OrderByDescending(d => d.Date)), Problem);
     }
 }

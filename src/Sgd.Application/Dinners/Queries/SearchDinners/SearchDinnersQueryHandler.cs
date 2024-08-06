@@ -7,7 +7,8 @@ namespace Sgd.Application.Dinners.Queries.SearchDinners;
 
 internal sealed class SearchDinnersQueryHandler(
     IDinnerRepository dinnerRepository,
-    IUserRepository userRepository
+    IUserRepository userRepository,
+    ICurrentUserProvider currentUserProvider
 ) : IQueryHandler<SearchDinnersQuery, IReadOnlyList<DinnerResponse>>
 {
     public async Task<ErrorOr<IReadOnlyList<DinnerResponse>>> Handle(
@@ -15,7 +16,17 @@ internal sealed class SearchDinnersQueryHandler(
         CancellationToken cancellationToken
     )
     {
-        var dinners = await dinnerRepository.SearchDinners(request.Name, cancellationToken);
+        var currentUser = await currentUserProvider.GetUserDomain();
+        if (currentUser.IsError)
+        {
+            return currentUser.Errors;
+        }
+
+        var dinners = await dinnerRepository.SearchDinners(
+            currentUser.Value.GroupIds.ToList(),
+            request.Name,
+            cancellationToken
+        );
 
         var userIds = DinnerUserHelper.GetUserIdsInvolvedInDinners(dinners);
         var users = await userRepository.GetUsers(userIds);

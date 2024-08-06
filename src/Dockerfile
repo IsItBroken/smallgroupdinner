@@ -2,14 +2,12 @@
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Sgd.Api/Sgd.Api.csproj", "Sgd.Api/"]
 COPY ["Sgd.Application/Sgd.Application.csproj", "Sgd.Application/"]
-COPY ["Sgd.Contracts/Sgd.Contracts.csproj", "Sgd.Contracts/"]
 COPY ["Sgd.Domain/Sgd.Domain.csproj", "Sgd.Domain/"]
 COPY ["Sgd.Infrastructure/Sgd.Infrastructure.csproj", "Sgd.Infrastructure/"]
 

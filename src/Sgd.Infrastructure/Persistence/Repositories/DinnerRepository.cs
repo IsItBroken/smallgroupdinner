@@ -25,10 +25,17 @@ public class DinnerRepository(SgdDbContext dbContext, IUnitOfWork unitOfWork) : 
         return await dbContext.Dinners.Find(p => p.Id == id).FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<List<Dinner>> SearchDinners(string? name, CancellationToken cancellationToken)
+    public async Task<List<Dinner>> SearchDinners(
+        List<ObjectId> groupIds,
+        string? name,
+        CancellationToken cancellationToken
+    )
     {
         var nameExpression = $"/.*{name}.*/i";
-        var filter = Builders<Dinner>.Filter.Regex(o => o.Name, nameExpression);
+        var filter = Builders<Dinner>.Filter.And(
+            Builders<Dinner>.Filter.In(p => p.GroupId, groupIds),
+            Builders<Dinner>.Filter.Regex(p => p.Name, new BsonRegularExpression(nameExpression))
+        );
         return await dbContext.Dinners.Find(filter).ToListAsync(cancellationToken);
     }
 

@@ -53,5 +53,7 @@ public class User : AggregateRoot<ObjectId>
         return Result.Success;
     }
 
+    public bool IsMemberOfGroup(ObjectId groupId) => _groupIds.Contains(groupId);
+
     private User() { }
 }

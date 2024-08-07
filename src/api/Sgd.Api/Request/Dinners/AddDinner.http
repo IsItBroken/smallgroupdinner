@@ -1,4 +1,4 @@
-@groupId=66ac495917004b18d8c7d506
+@groupId=66b3b776f81fe2f7f3009179
 
 ### Add Dinner
 POST {{sgdApiHost}}/Dinner
@@ -6,12 +6,12 @@ Content-Type: application/json
 Authorization: Bearer {{$auth.token("api")}}
 
 {
-  "name": "Gourmet Dinner",
-  "date": "2024-10-10T19:00:00Z",
-  "description": "A gourmet dinner with a lottery sign-up.",
-  "groupId": "{{groupId}}",
-  "capacity": 20,
-  "signUpMethod": "Lottery",
-  "randomSelectionTime": "2024-10-01T12:00:00Z",
-  "imageUrl": "https://example.com/images/gourmet_dinner.png"
-}
+    "name": "Mexican Fiesta",
+    "date": "2024-08-23T19:30:00Z",
+    "description": "Join us for a night of tacos, nachos, and margaritas.",
+    "groupId": "{{groupId}}",
+    "capacity": 11,
+    "signUpMethod": "Lottery",
+    "randomSelectionTime": "2024-08-19T19:30:00Z",
+    "imageUrl": "https://example.com/images/mexican_fiesta.png"
+  }

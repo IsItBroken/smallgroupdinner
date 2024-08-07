@@ -60,6 +60,15 @@ public class UpdateDinnerCommandHandler(
                 errors.AddRange(updateDescriptionRequest.Errors);
             }
         }
+        
+        if (dinner.AveragePrice != request.AveragePrice)
+        {
+            var updateAveragePriceRequest = dinner.UpdateAveragePrice(request.AveragePrice);
+            if (updateAveragePriceRequest.IsError)
+            {
+                errors.AddRange(updateAveragePriceRequest.Errors);
+            }
+        }
 
         if (dinner.Capacity != request.Capacity)
         {

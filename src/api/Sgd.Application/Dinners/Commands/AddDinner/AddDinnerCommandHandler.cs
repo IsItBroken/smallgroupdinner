@@ -41,6 +41,7 @@ public class AddDinnerCommandHandler(
             request.Name,
             request.Date,
             request.Description,
+            request.AveragePrice,
             request.GroupId,
             request.Capacity,
             signUpMethod,

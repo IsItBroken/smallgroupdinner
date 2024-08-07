@@ -4,7 +4,7 @@ Content-Type: application/json
 Authorization: Bearer {{$auth.token("api")}}
 
 {
-  "name": "Test Group",
-  "description": "This is a test group",
+  "name": "MMM 26",
+  "description": "MMMs Graduating in 2026",
   "isOpen": true
 }

@@ -11,6 +11,8 @@ public class Dinner : AggregateRoot<ObjectId>
     public DateTime Date { get; private set; }
 
     public string Description { get; private set; } = null!;
+    
+    public decimal? AveragePrice { get; private set; }
 
     public ObjectId GroupId { get; private set; }
 
@@ -39,6 +41,7 @@ public class Dinner : AggregateRoot<ObjectId>
         string name,
         DateTime date,
         string description,
+        decimal? averagePrice,
         ObjectId groupId,
         int capacity,
         SignUpMethod signUpMethod,
@@ -52,6 +55,7 @@ public class Dinner : AggregateRoot<ObjectId>
         Name = name;
         Date = date;
         Description = description;
+        AveragePrice = averagePrice;
         GroupId = groupId;
         Capacity = capacity;
         SignUpMethod = signUpMethod;
@@ -66,6 +70,7 @@ public class Dinner : AggregateRoot<ObjectId>
         string name,
         DateTime date,
         string description,
+        decimal? averagePrice,
         ObjectId groupId,
         int capacity,
         SignUpMethod signUpMethod,
@@ -79,6 +84,7 @@ public class Dinner : AggregateRoot<ObjectId>
             name,
             date,
             description,
+            averagePrice,
             groupId,
             capacity,
             signUpMethod,
@@ -103,6 +109,12 @@ public class Dinner : AggregateRoot<ObjectId>
     public ErrorOr<Success> UpdateDescription(string description)
     {
         Description = description;
+        return Result.Success;
+    }
+    
+    public ErrorOr<Success> UpdateAveragePrice(Decimal? averagePrice)
+    {
+        AveragePrice = averagePrice;
         return Result.Success;
     }
 

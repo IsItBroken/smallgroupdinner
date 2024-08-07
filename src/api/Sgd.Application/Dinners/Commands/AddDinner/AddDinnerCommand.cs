@@ -6,6 +6,7 @@ public sealed record AddDinnerCommand(
     string Name,
     DateTime Date,
     string Description,
+    decimal? AveragePrice,
     ObjectId GroupId,
     int Capacity,
     string SignUpMethod,

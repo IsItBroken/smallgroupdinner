@@ -8,6 +8,7 @@ public sealed class DinnerResponse
     public string Id { get; init; }
     public string Name { get; init; }
     public string Description { get; init; }
+    public decimal? AveragePrice { get; init; }
     public string GroupId { get; init; }
     public string? ImageUrl { get; init; }
     public DateTime Date { get; init; }
@@ -29,6 +30,7 @@ public sealed class DinnerResponse
             Id = dinner.Id.ToString(),
             Name = dinner.Name,
             Description = dinner.Description,
+            AveragePrice = dinner.AveragePrice,
             GroupId = dinner.GroupId.ToString(),
             ImageUrl = dinner.ImageUrl,
             Date = dinner.Date,

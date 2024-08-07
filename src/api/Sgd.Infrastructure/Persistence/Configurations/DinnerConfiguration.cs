@@ -11,6 +11,8 @@ public class DinnerConfiguration : BsonClassMap<Dinner>
         MapMember(a => a.Date).SetElementName(nameof(Dinner.Date).Camelize());
 
         MapMember(a => a.Description).SetElementName(nameof(Dinner.Description).Camelize());
+        
+        MapMember(a => a.AveragePrice).SetElementName(nameof(Dinner.AveragePrice).Camelize());
 
         MapMember(a => a.GroupId).SetElementName(nameof(Dinner.GroupId).Camelize());
 
